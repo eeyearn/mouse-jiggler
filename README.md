@@ -15,19 +15,41 @@ A minimal macOS application that keeps your status active on Microsoft Teams (or
 
 ## Installation
 
-1. Make sure you have Python 3 installed on your Mac
+1. Make sure you have Python 3 installed on your system
 
 2. Create a virtual environment:
 
-```bash
-python3 -m venv venv
-```
+   **On macOS/Linux:**
+   ```bash
+   python3 -m venv venv
+   ```
+
+   **On Windows:**
+   ```bash
+   python -m venv venv
+   ```
+   
+   Or use the Python launcher:
+   ```bash
+   py -m venv venv
+   ```
 
 3. Activate the virtual environment:
 
-```bash
-source venv/bin/activate
-```
+   **On macOS/Linux:**
+   ```bash
+   source venv/bin/activate
+   ```
+
+   **On Windows (PowerShell):**
+   ```powershell
+   venv\Scripts\Activate.ps1
+   ```
+
+   **On Windows (Command Prompt):**
+   ```cmd
+   venv\Scripts\activate.bat
+   ```
 
 4. Install the required dependencies:
 
@@ -36,6 +58,12 @@ pip install -r requirements.txt
 ```
 
 **Note:** You'll need to activate the virtual environment (step 3) each time you open a new terminal session before running the application.
+
+**Windows Troubleshooting:** If you get an error that Python was not found, try:
+- Using `python` instead of `python3`
+- Using `py` (Python launcher) instead
+- Installing Python from [python.org](https://www.python.org/downloads/) and make sure to check "Add Python to PATH" during installation
+- Disabling Windows App execution aliases: Settings > Apps > Advanced app settings > App execution aliases, then turn off Python aliases
 
 ## Usage
 
@@ -63,7 +91,7 @@ chmod +x mouse_jiggler.py
 ## Requirements
 
 - Python 3.6 or higher
-- macOS (tested on macOS Ventura and later)
+- macOS, Windows, or Linux
 - PyAutoGUI library
 
 ## Notes
@@ -75,11 +103,13 @@ chmod +x mouse_jiggler.py
 
 ## Troubleshooting
 
-If PyAutoGUI doesn't work on macOS, you may need to grant Accessibility permissions:
+**macOS:** If PyAutoGUI doesn't work, you may need to grant Accessibility permissions:
 
 1. Go to System Settings > Privacy & Security > Accessibility
 2. Add Terminal or Python to the allowed applications
 3. Restart the application
+
+**Windows:** If you encounter permission errors with PyAutoGUI, you may need to run the application as administrator or grant appropriate permissions.
 
 ## License
 

@@ -74,6 +74,62 @@ class MouseJiggler:
             self.canvas.itemconfig(self.status_text, text="Hover to Activate")
             self.stop_jiggling()
     
+    def get_window_bounds(self):
+        """Get the window bounds for random mouse movement"""
+        try:
+            # Force window to update geometry before getting dimensions
+            self.root.update_idletasks()
+            
+            # Get canvas position on screen (absolute coordinates)
+            canvas_x = self.canvas.winfo_rootx()
+            canvas_y = self.canvas.winfo_rooty()
+            
+            # Get canvas dimensions
+            canvas_width = self.canvas.winfo_width()
+            canvas_height = self.canvas.winfo_height()
+            
+            # If canvas dimensions are invalid (not yet rendered), use window dimensions
+            if canvas_width <= 1 or canvas_height <= 1:
+                canvas_x = self.root.winfo_rootx()
+                canvas_y = self.root.winfo_rooty()
+                canvas_width = self.root.winfo_width()
+                canvas_height = self.root.winfo_height()
+            
+            # Ensure we have valid dimensions
+            if canvas_width <= 1 or canvas_height <= 1:
+                # Fallback: use default dimensions
+                canvas_width = 200
+                canvas_height = 200
+            
+            # Use margins to keep positions well within window bounds
+            margin = 30
+            
+            # Calculate bounds for random positions
+            min_x = canvas_x + margin
+            max_x = canvas_x + canvas_width - margin
+            min_y = canvas_y + margin
+            max_y = canvas_y + canvas_height - margin
+            
+            # Ensure bounds are within screen limits
+            screen_width = self.root.winfo_screenwidth()
+            screen_height = self.root.winfo_screenheight()
+            
+            min_x = max(0, min(min_x, screen_width - 1))
+            max_x = max(0, min(max_x, screen_width - 1))
+            min_y = max(0, min(min_y, screen_height - 1))
+            max_y = max(0, min(max_y, screen_height - 1))
+            
+            # Ensure we have valid range
+            if max_x <= min_x:
+                max_x = min_x + 50
+            if max_y <= min_y:
+                max_y = min_y + 50
+            
+            return (min_x, max_x, min_y, max_y)
+        except Exception as e:
+            print(f"Error getting window bounds: {e}")
+            return None
+    
     def start_jiggling(self):
         """Start the mouse jiggling loop"""
         if self.is_active:
@@ -89,21 +145,30 @@ class MouseJiggler:
             self.jiggle_job = None
     
     def jiggle_mouse(self):
-        """Move the mouse randomly within the window bounds"""
+        """Move the mouse to a random position within the window"""
         try:
-            # Get window geometry
-            window_x = self.root.winfo_x()
-            window_y = self.root.winfo_y()
-            window_width = self.canvas.winfo_width()
-            window_height = self.canvas.winfo_height()
+            # Get window bounds
+            bounds = self.get_window_bounds()
             
-            # Calculate random position within window (with some margin)
-            margin = 10
-            target_x = window_x + random.randint(margin, max(margin + 1, window_width - margin))
-            target_y = window_y + random.randint(margin, max(margin + 1, window_height - margin))
+            if bounds is None:
+                return
             
-            # Move mouse to random position within window
+            min_x, max_x, min_y, max_y = bounds
+            
+            # Generate random position within window bounds
+            target_x = random.randint(int(min_x), int(max_x))
+            target_y = random.randint(int(min_y), int(max_y))
+            
+            # Double-check bounds before moving
+            screen_width = self.root.winfo_screenwidth()
+            screen_height = self.root.winfo_screenheight()
+            target_x = max(0, min(target_x, screen_width - 1))
+            target_y = max(0, min(target_y, screen_height - 1))
+            
+            # Move mouse to the random position
             pyautogui.moveTo(target_x, target_y, duration=0.1)
+            # Click at the new position
+            pyautogui.click(target_x, target_y)
             
         except Exception as e:
             print(f"Error moving mouse: {e}")
