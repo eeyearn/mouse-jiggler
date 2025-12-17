@@ -67,6 +67,8 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Running from Terminal
+
 Run the application:
 
 ```bash
@@ -79,6 +81,21 @@ Or make it executable and run directly:
 chmod +x mouse_jiggler.py
 ./mouse_jiggler.py
 ```
+
+### Creating a Desktop Shortcut (Windows)
+
+To run the app without opening a terminal:
+
+1. **Double-click `run_mouse_jiggler.vbs`** - This will run the app without showing a console window
+
+2. **Create a desktop shortcut** (optional, for easier access):
+   - Right-click on `run_mouse_jiggler.vbs` in File Explorer
+   - Select "Create shortcut"
+   - Drag the shortcut to your desktop
+   - Right-click the shortcut → Properties → Change Icon (optional) to customize it
+
+3. **Alternative: Use the batch file directly**:
+   - Double-click `run_mouse_jiggler.bat` - This will show a brief console window before the app starts
 
 ### How to Use
 
